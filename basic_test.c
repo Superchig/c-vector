@@ -67,12 +67,39 @@ static void insert_test()
 	destroy_int_vec(vec);
 }
 
+static void delete_test()
+{
+	IntVec* vec = new_int_vec(2);
+
+	vec->push(vec, 7);
+	vec->push(vec, 91);
+	vec->push(vec, 561);
+	vec->push(vec, 78);
+	vec->push(vec, 57);
+
+	vec->del(vec, 1);
+	printf("current: %lu", vec->current);
+
+	printf("[ ");
+	for (size_t i = 0; i < vec->current; i++)
+	{
+		printf("%d ", vec->nth(vec, i));
+	}
+	printf("]\n");
+
+	assert_int_equal(561, vec->nth(vec, 1));
+	assert_int_equal(4, vec->current);
+
+	destroy_int_vec(vec);
+}
+
 int main()
 {
 	const struct CMUnitTest test[] = {
 		cmocka_unit_test(push_test),
 		cmocka_unit_test(pop_test),
 		cmocka_unit_test(insert_test),
+		cmocka_unit_test(delete_test),
 	};
 
 	printf("\n-------\n");

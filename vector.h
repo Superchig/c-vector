@@ -17,6 +17,7 @@ struct IntVec {
 };
 
 
+IntVec* init_int_vec(IntVec* proto, int* intptr, size_t limit);
 IntVec* new_int_vec(size_t limit);
 
 void double_limit(IntVec* self);
@@ -30,3 +31,4 @@ int int_vec_nth(IntVec* self, int n);
 void destroy_int_vec(IntVec* self);
 
 #define _call(N, F, ...) N->F(N, ##__VA_ARGS__)
+#define _(N, F, ...) N->F(N, ##_VA_ARGS__)

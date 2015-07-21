@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <stdlib.h>
-#include <gc.h>
 #include "vector.h"
 #include "dbg.h"
 
@@ -9,7 +8,18 @@ IntVec* new_int_vec(size_t limit)
 	IntVec* proto = malloc(sizeof(IntVec));
 	check_mem(proto);
 
-	proto->data = malloc(sizeof(int) * limit);
+	int* intptr = malloc(sizeof(int) * limit);
+	check_mem(intptr);
+
+	return init_int_vec(proto, intptr, limit);
+
+error:
+	return NULL;
+}
+
+IntVec* init_int_vec(IntVec* proto, int* intptr, size_t limit)
+{
+	proto->data = intptr;
 	proto->limit = limit;
 	proto->current = 0;
 
@@ -17,11 +27,9 @@ IntVec* new_int_vec(size_t limit)
 	proto->push = &int_vec_push;
 	proto->nth = &int_vec_nth;
 	proto->ins = &int_vec_insert;
+	proto->del = &int_vec_delete;
 
 	return proto;
-
-error:
-	return NULL;
 }
 
 void int_vec_double_limit(IntVec* self)
@@ -88,10 +96,20 @@ error:
 	return;
 }
 
-/* void int_vec_delete(IntVec* self, int index) */
-/* { */
-	
-/* } */
+void int_vec_delete(IntVec* self, int index)
+{
+	check((size_t)index <= self->current,
+		"Cannot delete item at index greater than current!");
+
+	for (size_t i = index; i < self->current; i++) {
+		self->data[i] = self->data[i + 1];
+	}
+
+	self->current--;
+
+error:
+	return;
+}
 
 void destroy_int_vec(IntVec* self)
 {

@@ -9,10 +9,10 @@ dbg.h stands for debug, and holds Zed's debug macros.
    1. Push
    2. Pop
    3. Insert
+   4. Delete
 
 ## To-Do
 1. Implement:
-	2. Delete
 	1. Search
 1. Write much, much better Makefile
 2. Vector code generator
